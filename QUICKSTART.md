@@ -1,175 +1,143 @@
-# PulseChat - Quick Start Guide
+# PulseChat - Quick Start Guide 🚀
 
-## ⚡ Get Started in 5 Minutes
+## ✅ Current Status
 
-### Step 1: Install Dependencies (2 minutes)
+**Backend Server:** Running on http://localhost:5000
+**Frontend App:** Running on http://localhost:5174
 
-```bash
-# Backend
-cd server
-npm install
+## 🎯 Access Your Application
 
-# Frontend  
-cd ../client
-npm install
-```
+Open your browser and go to:
+**http://localhost:5174**
 
-### Step 2: Setup Environment Variables (1 minute)
+## 📝 MongoDB Setup (Required)
 
-```bash
-# Create server/.env
-cd server
-cp .env.example .env
-```
+The application needs MongoDB to store data. Here are your options:
 
-Edit `server/.env` with minimum required values:
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/pulsechat
-JWT_SECRET=my-super-secret-key-change-in-production
-JWT_REFRESH_SECRET=my-refresh-secret-key-change-in-production
-OPENAI_API_KEY=sk-your-openai-api-key-here
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-CLIENT_URL=http://localhost:5173
-NODE_ENV=development
-```
+### Option 1: Install MongoDB Locally (Recommended for Development)
 
 ```bash
-# Create client/.env
-cd ../client
-echo "VITE_API_URL=http://localhost:5000" > .env
+# On Ubuntu/Debian
+sudo apt-get install -y mongodb-org
+
+# On Mac
+brew tap mongodb/brew
+brew install mongodb-community
+
+# Start MongoDB
+sudo systemctl start mongod    # Linux
+brew services start mongodb     # Mac
 ```
 
-### Step 3: Start MongoDB (if using local)
+### Option 2: Use MongoDB Atlas (Cloud - Free Tier Available)
 
-```bash
-# Option 1: Local MongoDB
-mongod
-
-# Option 2: MongoDB Atlas (recommended)
-# Use connection string in server/.env
-# Example: mongodb+srv://username:password@cluster.mongodb.net/pulsechat
-```
-
-### Step 4: Run Development Servers (1 minute)
-
-Open TWO terminal windows:
-
-**Terminal 1 - Backend:**
-```bash
-cd server
-npm run dev
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd client
-npm run dev
-```
-
-### Step 5: Access Application
-
-Open browser to: **http://localhost:5173**
-
-## 🎯 Test the Application
-
-### 1. Register Two Users
-- Open browser → Register account (User A)
-- Open incognito window → Register account (User B)
-
-### 2. Start Chatting
-- User A: Search for User B
-- Create chat
-- Send messages
-- See real-time delivery
-
-### 3. Test Features
-- **Typing Indicators**: Start typing, see indicator
-- **Online Status**: Check green dot
-- **Smart Replies**: Send message, wait for AI suggestions
-- **Focus Mode**: Enable in User B, see auto-reply
-- **Analytics**: Visit /analytics page
-
-## 🚀 Optional: Get API Keys
-
-### OpenAI (for AI features)
-1. Go to https://platform.openai.com
-2. Sign up / Login
-3. Create API key
-4. Add to `server/.env` as `OPENAI_API_KEY`
-
-### Cloudinary (for media uploads)
-1. Go to https://cloudinary.com
-2. Sign up free
-3. Get cloud name, API key, API secret from dashboard
-4. Add to `server/.env`
-
-### MongoDB Atlas (for cloud database)
-1. Go to https://www.mongodb.com/atlas
-2. Create free cluster
-3. Create database user
+1. Go to https://www.mongodb.com/cloud/atlas
+2. Sign up for free account
+3. Create a free cluster
 4. Get connection string
-5. Replace `MONGODB_URI` in `server/.env`
+5. Update `/home/daytona/codebase/server/.env`:
+   ```
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/pulsechat
+   ```
+6. Restart server: `npm start`
 
-## 📝 Common Issues
+### Option 3: Run MongoDB in Docker
 
-### Issue: Port already in use
 ```bash
-# Kill process on port 5000
-lsof -ti:5000 | xargs kill -9
+# Start MongoDB container
+docker run -d -p 27017:27017 --name pulsechat-mongo mongo:latest
 
-# Or change port in server/.env
-PORT=5001
+# Restart backend server
+cd /home/daytona/codebase/server
+npm start
 ```
 
-### Issue: MongoDB connection failed
-- Check if MongoDB is running: `mongod`
-- Or use MongoDB Atlas connection string
+## 🔑 Enable AI Features (Optional)
 
-### Issue: CORS errors
-- Verify `CLIENT_URL` in server/.env matches frontend URL
-- Should be `http://localhost:5173` for development
+To enable AI smart replies, summarization, and other AI features:
 
-### Issue: Socket not connecting
-- Check browser console for errors
-- Verify backend is running on port 5000
-- Check `VITE_API_URL` in client/.env
+1. Get OpenAI API Key from https://platform.openai.com
+2. Update `/home/daytona/codebase/server/.env`:
+   ```
+   OPENAI_API_KEY=sk-your-actual-key-here
+   ```
+3. Restart server
 
-## 🎨 Project Structure
+Without OpenAI key, the app works but AI features show demo responses.
 
+## 📸 Enable Media Uploads (Optional)
+
+To enable image/video uploads:
+
+1. Sign up at https://cloudinary.com (free account)
+2. Get your credentials from Dashboard
+3. Update `/home/daytona/codebase/server/.env`:
+   ```
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
+   ```
+4. Restart server
+
+## 🧪 Test the Application
+
+1. Go to http://localhost:5174
+2. Click "Sign up"
+3. Create an account with any email (e.g., test@example.com)
+4. Start chatting!
+
+## 🐛 Troubleshooting
+
+### Frontend not loading?
+Check if it's running:
+```bash
+curl http://localhost:5174
 ```
-PulseChat/
-├── server/           # Backend (Node.js + Express)
-│   ├── controllers/  # Business logic
-│   ├── models/       # Database schemas
-│   ├── routes/       # API routes
-│   ├── sockets/      # WebSocket handlers
-│   ├── middleware/   # Auth & validation
-│   ├── utils/        # Helpers (JWT, AI, Cloudinary)
-│   └── server.js     # Entry point
-│
-├── client/           # Frontend (React + Vite)
-│   ├── src/
-│   │   ├── pages/    # Login, Register, Dashboard, Analytics
-│   │   ├── context/  # AuthContext, ChatContext
-│   │   ├── services/ # API client
-│   │   └── utils/    # Socket client
-│   └── index.html
-│
-└── README.md
+
+If not, restart:
+```bash
+cd /home/daytona/codebase/client
+npm run dev
 ```
 
-## 📚 Documentation
+### Backend not responding?
+Check if it's running:
+```bash
+curl http://localhost:5000/api/auth/me
+```
 
-- **Full README**: See `README.md`
-- **Deployment Guide**: See `DEPLOYMENT.md`
-- **Project Summary**: See `PROJECT_SUMMARY.md`
+If not, restart:
+```bash
+cd /home/daytona/codebase/server
+npm start
+```
 
-## 🎉 You're Ready!
+### Can't create account?
+This means MongoDB is not connected. Follow the MongoDB setup steps above.
 
-Start coding, testing, and deploying your production-ready chat application!
+## 📊 View Logs
 
-Need help? Check the documentation files or open an issue.
+Backend logs:
+```bash
+tail -f /tmp/claude/-home-daytona-codebase/tasks/ba59ba4.output
+```
+
+Frontend logs:
+```bash
+tail -f /tmp/claude/-home-daytona-codebase/tasks/b2657cf.output
+```
+
+## 🎉 You're All Set!
+
+Once MongoDB is connected, you can:
+- Create accounts and chat in real-time
+- Test all messaging features
+- View analytics dashboard
+- Try focus mode and privacy settings
+- Search through messages
+
+For full documentation, see:
+- README.md - Complete project overview
+- FEATURES.md - All 100+ features
+- SETUP_GUIDE.md - Detailed setup instructions
 

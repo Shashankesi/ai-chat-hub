@@ -1,10 +1,16 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// Initialize OpenAI only if API key is provided
+let openai = null;
+if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'demo') {
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+  });
+}
 
 export const summarizeConversation = async (messages) => {
+  if (!openai) return 'AI features disabled - add OpenAI API key to enable';
+
   try {
     const conversationText = messages.map(m =>
       `${m.sender.name}: ${m.content.text}`
@@ -34,6 +40,8 @@ export const summarizeConversation = async (messages) => {
 };
 
 export const generateSmartReplies = async (messageText) => {
+  if (!openai) return ['Sounds good!', 'Thanks!', 'Got it'];
+
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
@@ -60,6 +68,8 @@ export const generateSmartReplies = async (messageText) => {
 };
 
 export const detectMessageIntent = async (messageText) => {
+  if (!openai) return { intent: 'casual' };
+
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
@@ -113,6 +123,9 @@ export const detectImportantMessage = async (messageText) => {
     const hasKeyword = keywords.some(keyword => lowerText.includes(keyword));
 
     if (hasKeyword) return true;
+
+    // Return false if no AI available
+    if (!openai) return false;
 
     // For more advanced detection, use AI
     const response = await openai.chat.completions.create({
