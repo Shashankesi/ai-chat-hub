@@ -1,4 +1,4 @@
-# PulseChat - AI-Enhanced Real-Time Chat Application
+# PulseChat - AI-Enhanced Real-Time Chat Application....
 
 <div align="center">
 
